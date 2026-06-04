@@ -1,63 +1,52 @@
-"use client";
+'use client'
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-// Follow the new import pattern
-import {
-  TextField,
-  Label,
-  Input,
-  FieldError,
-  Description,
-  Form,
-  Button,
-  Link,
-  Checkbox,
-} from "@heroui/react";
+import { TextField, Label, Input, FieldError, Description, Form, Button, Link, Checkbox } from "@heroui/react";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import animationData from '../../../../public/images/animate.svg';
 import Image from "next/image";
-const LoginPage = () => {
+const SignInPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // ১. প্যারেন্ট কন্টেইনারের জন্য অ্যানিমেশন ভেরিয়েন্ট
+  // ১. প্যারেন্ট কন্টেইনারের জন্য অ্যানিমেশন ভেরিয়েন্ট 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
-    },
+      transition: { staggerChildren: 0.12, delayChildren: 0.1 }
+    }
   };
 
   // ২. চাইল্ড এলিমেন্টগুলোর জন্য স্মুথ আপ-রাইজ মোশন
   const itemVariants = {
     hidden: { opacity: 0, y: 25 },
-    visible: {
-      opacity: 1,
+    visible: { 
+      opacity: 1, 
       y: 0,
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-    },
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+    }
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = {};
-
     formData.forEach((value, key) => {
       data[key] = value.toString();
     });
-
-    // Replace with your real sign-in logic
-    alert(`Form submitted with: ${JSON.stringify(data, null, 2)}`);
+    
+    // আপনার লগইন হ্যান্ডলিং লজিক এখানে লিখুন
+    alert(`Signing in with: ${JSON.stringify(data, null, 2)}`);
   };
 
   return (
     <div className="relative w-full min-h-screen bg-[#0b0612] text-white flex items-center justify-center overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
+      
       {/* ─── BACKGROUND LAYERS ─── */}
       {/* সিগনেচার ভার্টিক্যাল ডার্ক স্ট্রাইপ গ্রিড */}
       <div className="absolute inset-0 z-0 opacity-25 pointer-events-none">
@@ -70,10 +59,11 @@ const LoginPage = () => {
 
       {/* ─── MAIN 2-SECTION SPLIT LAYOUT ─── */}
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+        
         {/* ========================================================
             SECTION 1: LEFT SIDE - LOGIN FORM CARD (5 Columns)
             ======================================================== */}
-        <motion.div
+        <motion.div 
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -81,6 +71,7 @@ const LoginPage = () => {
         >
           {/* গ্লাস-মরফিজম মোড়ানো মেইন কার্ড ফর্ম */}
           <div className="w-full bg-[#140f24]/40 border border-white/[0.04] backdrop-blur-2xl rounded-[2.5rem] p-8 sm:p-10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] relative">
+            
             {/* মিনি টপ অ্যাকসেন্ট বার */}
             <div className="w-12 h-[3px] bg-gradient-to-r from-pink-500 to-indigo-500 rounded-full mb-8"></div>
 
@@ -94,9 +85,10 @@ const LoginPage = () => {
               </p>
             </motion.div>
 
-            {/* ফর্ম কম্পোনেন্টস - Following the new pattern */}
+            {/* ফর্ম কম্পোনেন্টস */}
             <Form className="space-y-5" onSubmit={onSubmit}>
-              {/* ইমেইল TextField - Pattern Followed */}
+              
+              {/* ইমেইল ইনপুট (Custom Positioned Setup) */}
               <motion.div variants={itemVariants} className="relative group">
                 <TextField
                   isRequired
@@ -105,10 +97,8 @@ const LoginPage = () => {
                   className="flex flex-col"
                   validate={(value) => {
                     if (!value) return "Please enter your email";
-                    if (
-                      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)
-                    ) {
-                      return "Please enter a valid email address";
+                    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+                        return "Please enter a valid email address";
                     }
                     return null;
                   }}
@@ -116,29 +106,20 @@ const LoginPage = () => {
                   <Label className="text-slate-300 font-bold text-xs tracking-wide mb-1 select-none">
                     Email Address
                   </Label>
-                  {/* startContent is replaced by absolute positioning within TextField */}
                   <div className="relative">
-                    <Input
+                    <Input 
                       placeholder="name@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className={`
-                        w-full h-12 rounded-xl text-sm pl-11 pr-4 text-slate-200 placeholder:text-slate-600
-                        bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.04]
-                        focus:outline-none focus:border-purple-500/80 transition-all duration-300
-                      `}
+                      className="w-full h-12 rounded-xl text-sm pl-11 pr-4 text-slate-200 placeholder:text-slate-600 bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.04] focus:outline-none focus:border-purple-500/80 transition-all duration-300"
                     />
-                    <Mail
-                      size={16}
-                      className="text-slate-500 shrink-0 absolute left-4 top-1/2 -translate-y-1/2 select-none"
-                    />
+                    <Mail size={16} className="text-slate-500 shrink-0 absolute left-4 top-1/2 -translate-y-1/2 select-none" />
                   </div>
-                  {/* FieldError Pattern */}
                   <FieldError className="text-xs text-pink-500 font-medium mt-1 pl-1" />
                 </TextField>
               </motion.div>
 
-              {/* পাসওয়ার্ড TextField - Pattern Followed */}
+              {/* পাসওয়ার্ড ইনপুট (Custom Positioned Setup) */}
               <motion.div variants={itemVariants} className="relative group">
                 <TextField
                   isRequired
@@ -147,9 +128,7 @@ const LoginPage = () => {
                   className="flex flex-col"
                   validate={(value) => {
                     if (!value) return "Please enter your password";
-                    if (value.length < 8)
-                      return "Password must be at least 8 characters";
-                    // Custom description already informs, we enforce basic length here.
+                    if (value.length < 8) return "Password must be at least 8 characters";
                     return null;
                   }}
                 >
@@ -157,42 +136,23 @@ const LoginPage = () => {
                     Password
                   </Label>
                   <div className="relative">
-                    <Input
+                    <Input 
                       type={isVisible ? "text" : "password"}
                       placeholder="••••••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className={`
-                        w-full h-12 rounded-xl text-sm pl-11 pr-11 text-slate-200 placeholder:text-slate-600
-                        bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.04]
-                        focus:outline-none focus:border-purple-500/80 transition-all duration-300
-                      `}
+                      className="w-full h-12 rounded-xl text-sm pl-11 pr-11 text-slate-200 placeholder:text-slate-600 bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.04] focus:outline-none focus:border-purple-500/80 transition-all duration-300"
                     />
-                    <Lock
-                      size={16}
-                      className="text-slate-500 shrink-0 absolute left-4 top-1/2 -translate-y-1/2 select-none"
-                    />
-
-                    {/* endContent toggle replaced by absolute positioning */}
-                    <button
-                      className="focus:outline-none absolute right-4 top-1/2 -translate-y-1/2 select-none"
-                      type="button"
-                      onClick={toggleVisibility}
-                    >
+                    <Lock size={16} className="text-slate-500 shrink-0 absolute left-4 top-1/2 -translate-y-1/2 select-none" />
+                    
+                    <button className="focus:outline-none absolute right-4 top-1/2 -translate-y-1/2 select-none" type="button" onClick={toggleVisibility}>
                       {isVisible ? (
-                        <EyeOff
-                          size={16}
-                          className="text-slate-500 hover:text-slate-300 transition-colors"
-                        />
+                        <EyeOff size={16} className="text-slate-500 hover:text-slate-300 transition-colors" />
                       ) : (
-                        <Eye
-                          size={16}
-                          className="text-slate-500 hover:text-slate-300 transition-colors"
-                        />
+                        <Eye size={16} className="text-slate-500 hover:text-slate-300 transition-colors" />
                       )}
                     </button>
                   </div>
-                  {/* Description and FieldError Pattern */}
                   <Description className="text-[11px] text-slate-500 pt-1 pb-1 select-none leading-tight">
                     Must be at least 8 characters.
                   </Description>
@@ -201,29 +161,22 @@ const LoginPage = () => {
               </motion.div>
 
               {/* রিমেম্বার মি এবং ফরগট পাসওয়ার্ড রো */}
-              <motion.div
-                variants={itemVariants}
-                className="flex items-center justify-between pt-1 pb-2"
-              >
-                <Checkbox
-                  radius="sm"
+              <motion.div variants={itemVariants} className="flex items-center justify-between pt-1 pb-2">
+                <Checkbox 
+                  radius="sm" 
                   classNames={{
                     label: "text-xs font-semibold text-slate-400 select-none",
-                    wrapper:
-                      "before:border-white/[0.1] after:bg-purple-600 before:bg-white/[0.01]",
+                    wrapper: "before:border-white/[0.1] after:bg-purple-600 before:bg-white/[0.01]",
                   }}
                 >
                   Remember me
                 </Checkbox>
-                <Link
-                  href="#"
-                  className="text-xs font-bold text-purple-400 hover:text-purple-300 transition-colors tracking-wide select-none"
-                >
+                <Link href="#" className="text-xs font-bold text-purple-400 hover:text-purple-300 transition-colors tracking-wide select-none">
                   Forgot Password?
                 </Link>
               </motion.div>
 
-              {/* সাবমিট বাটন (Hero UI v3 Button উইথ Framer Motion ইন্টারঅ্যাকশন) */}
+              {/* সাবমিট বাটন */}
               <motion.div variants={itemVariants} className="pt-2">
                 <Button
                   type="submit"
@@ -235,18 +188,13 @@ const LoginPage = () => {
               </motion.div>
 
               {/* বটম সাইন-আপ রিডাইরেক্ট নোট */}
-              <motion.p
-                variants={itemVariants}
-                className="text-center text-xs text-slate-500 font-medium pt-4 select-none"
-              >
+              <motion.p variants={itemVariants} className="text-center text-xs text-slate-500 font-medium pt-4 select-none">
                 Don't have an account?{" "}
-                <Link
-                  href="/auth/signUp"
-                  className="text-xs font-black text-white hover:underline ml-1"
-                >
-                  Sign Up
+                <Link href="/auth/login" className="text-xs font-black text-white hover:underline ml-1">
+                  Login
                 </Link>
               </motion.p>
+
             </Form>
           </div>
         </motion.div>
@@ -254,7 +202,7 @@ const LoginPage = () => {
         {/* ========================================================
             SECTION 2: RIGHT SIDE - LOTTIE ANIMATION BRAND BOX (7 Columns)
             ======================================================== */}
-        <motion.div
+        <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -262,15 +210,11 @@ const LoginPage = () => {
         >
           {/* লটি প্লেয়ার কন্টেইনার */}
           <div className="w-full max-w-[480px] aspect-square flex items-center justify-center relative mb-6">
+            
             {/* ডাইনামিক স্পিনিং রিং ব্যাকগ্রাউন্ড গ্লো */}
             <div className="absolute inset-0 bg-indigo-500/10 rounded-full filter blur-3xl animate-pulse"></div>
-
-            {/* <DotLottieReact
-              src=''
-              loop
-              autoplay
-              className="w-full h-full object-contain relative z-10"
-            /> */}
+            
+            {/* ⚠️ এটি এখন আপনার লোকাল পাবলিক ফোল্ডার থেকে ফাইলটি রিড করবে */}
             <Image src={animationData} alt="Animation" className="w-full h-full object-contain relative z-10" />
           </div>
 
@@ -280,14 +224,14 @@ const LoginPage = () => {
               Global Job Match
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed">
-              Connect with vetted world-class companies and discover
-              opportunities personalized just for your talent ecosystem.
+              Connect with vetted world-class companies and discover opportunities personalized just for your talent ecosystem.
             </p>
           </div>
         </motion.div>
+
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default SignInPage;

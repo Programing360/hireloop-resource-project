@@ -30,7 +30,7 @@ export default function CustomNavbar() {
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="xl"
-      className="bg-[#141212]/90 backdrop-blur-md py-1 border-b border-white/[0.03] fixed top-0 left-0 right-0 z-50"
+      className="bg-[#141212]/90 backdrop-blur-md py-1 border-b border-white/[0.03] fixed top-0 left-0 right-0 z-50 container mx-auto bg-transparent"
     >
       {/* 1. LEFT SLOT: Mobile Toggle & Brand Logo */}
       <NavbarContent justify="start" className="gap-4">
@@ -97,7 +97,7 @@ export default function CustomNavbar() {
 
         <NavbarItem>
           <Link
-            href="#"
+            href="/auth/login"
             className="text-[#8465fc] hover:text-[#997fff] text-[13px] font-semibold tracking-wide transition-colors duration-200"
           >
             Sign In

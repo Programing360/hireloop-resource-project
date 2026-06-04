@@ -17,6 +17,8 @@ import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import animationData from '../../../../public/images/animate.svg';
 import Image from "next/image";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 const LoginPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -43,17 +45,33 @@ const LoginPage = () => {
     },
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = {};
+    const user = Object.fromEntries(formData.entries());
+    
 
-    formData.forEach((value, key) => {
-      data[key] = value.toString();
+
+    // const userData = {};
+    // formData.forEach((value, key) => {
+    //   userData[key] = value.toString();
+    // });
+
+    const { data, error } = await authClient.signIn.email({
+    
+        email: user.email,
+        password: user.password,
+        rememberMe: true,
+        callbackURL: "/",
     });
+     if(data){
+      toast.success("Login Successful!")
+     }else{
+      toast.error(`${error.message}` || "Login Failed! Please check your credentials.")
+     }
+     console.log(data, error);
 
     // Replace with your real sign-in logic
-    alert(`Form submitted with: ${JSON.stringify(data, null, 2)}`);
   };
 
   return (

@@ -1,13 +1,25 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 // HeroUI v3 এর নির্দিষ্ট প্যাটার্ন অনুযায়ী ইমপোর্ট করা হয়েছে
-import { TextField, Label, Input, FieldError, Description, Form, Button, Link, Radio, RadioGroup } from "@heroui/react";
+import {
+  TextField,
+  Label,
+  Input,
+  FieldError,
+  Description,
+  Form,
+  Button,
+  Link,
+  Radio,
+  RadioGroup,
+} from "@heroui/react";
 import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import animationData from '../../../../public/images/animate.svg';
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import animationData from "../../../../public/images/animate.svg";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 const SignUpPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -20,46 +32,43 @@ const SignUpPage = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.1 }
-    }
+      transition: { staggerChildren: 0.1, delayChildren: 0.1 },
+    },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
-    }
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+    },
   };
 
-  const onSubmit = async(e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-     const user = Object.fromEntries(formData.entries());
+    const user = Object.fromEntries(formData.entries());
+
     
 
-
-    // const userData = {};
-    // formData.forEach((value, key) => {
-    //   userData[key] = value.toString();
-    // });
-
     const { data, error } = await authClient.signUp.email({
-       name: user.fullName,
-        email: user.email,
-        password: user.password,
-        role: user.role,
-        callbackURL: "/login",
+      name: user.fullName,
+      email: user.email,
+      password: user.password,
+      role: user.role,
+      callbackURL: "/auth/login",
     });
-
-      console.log(data,error, user);
-    // alert(`Account creating with: ${JSON.stringify(data, null, 2)}`);
+    if(data){
+          toast.success("Sign Up Successful!")
+         }else{
+          toast.error(`${error.message}` || "Sign Up Failed! Please check your credentials.")
+         }
+    console.log(data, error, user);
   };
 
   return (
     <div className="relative w-full min-h-screen bg-[#0b0612] text-white flex items-center justify-center overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
-      
       {/* ─── BACKGROUND LAYERS ─── */}
       <div className="absolute inset-0 z-0 opacity-25 pointer-events-none">
         <div className="w-full h-full bg-[linear-gradient(to_right,#80808015_1px,transparent_1px)] bg-[size:45px_100%] md:bg-[size:65px_100%]"></div>
@@ -70,18 +79,16 @@ const SignUpPage = () => {
 
       {/* ─── MAIN 2-SECTION SPLIT LAYOUT ─── */}
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-        
         {/* ========================================================
             SECTION 1: LEFT SIDE - SIGN UP FORM CARD (5 Columns)
             ======================================================== */}
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
           className="lg:col-span-5 w-full flex flex-col justify-center"
         >
           <div className="w-full bg-[#140f24]/40 border border-white/[0.04] backdrop-blur-2xl rounded-[2.5rem] p-6 sm:p-8 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] relative">
-            
             <div className="w-12 h-[3px] bg-gradient-to-r from-pink-500 to-indigo-500 rounded-full mb-6"></div>
 
             <motion.div variants={itemVariants} className="mb-6">
@@ -94,7 +101,6 @@ const SignUpPage = () => {
             </motion.div>
 
             <Form className="space-y-4" onSubmit={onSubmit}>
-              
               {/* ১. ফুল নেম ফিল্ড (নতুন যুক্ত করা হয়েছে) */}
               <motion.div variants={itemVariants} className="relative group">
                 <TextField
@@ -102,19 +108,24 @@ const SignUpPage = () => {
                   name="fullName"
                   type="text"
                   className="flex flex-col"
-                  validate={(value) => (!value ? "Please enter your name" : null)}
+                  validate={(value) =>
+                    !value ? "Please enter your name" : null
+                  }
                 >
                   <Label className="text-slate-300 font-bold text-xs tracking-wide mb-1 select-none">
                     Full Name
                   </Label>
                   <div className="relative">
-                    <Input 
+                    <Input
                       placeholder="John Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       className="w-full h-11 rounded-xl text-sm pl-10 pr-4 text-slate-200 placeholder:text-slate-600 bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.04] focus:outline-none focus:border-purple-500/80 transition-all duration-300"
                     />
-                    <User size={15} className="text-slate-500 shrink-0 absolute left-3 top-1/2 -translate-y-1/2 select-none" />
+                    <User
+                      size={15}
+                      className="text-slate-500 shrink-0 absolute left-3 top-1/2 -translate-y-1/2 select-none"
+                    />
                   </div>
                   <FieldError className="text-xs text-pink-500 font-medium mt-1 pl-1" />
                 </TextField>
@@ -129,8 +140,10 @@ const SignUpPage = () => {
                   className="flex flex-col"
                   validate={(value) => {
                     if (!value) return "Please enter your email";
-                    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-                        return "Please enter a valid email address";
+                    if (
+                      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)
+                    ) {
+                      return "Please enter a valid email address";
                     }
                     return null;
                   }}
@@ -139,13 +152,16 @@ const SignUpPage = () => {
                     Email Address
                   </Label>
                   <div className="relative">
-                    <Input 
+                    <Input
                       placeholder="name@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full h-11 rounded-xl text-sm pl-10 pr-4 text-slate-200 placeholder:text-slate-600 bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.04] focus:outline-none focus:border-purple-500/80 transition-all duration-300"
                     />
-                    <Mail size={15} className="text-slate-500 shrink-0 absolute left-3 top-1/2 -translate-y-1/2 select-none" />
+                    <Mail
+                      size={15}
+                      className="text-slate-500 shrink-0 absolute left-3 top-1/2 -translate-y-1/2 select-none"
+                    />
                   </div>
                   <FieldError className="text-xs text-pink-500 font-medium mt-1 pl-1" />
                 </TextField>
@@ -160,7 +176,8 @@ const SignUpPage = () => {
                   className="flex flex-col"
                   validate={(value) => {
                     if (!value) return "Please enter your password";
-                    if (value.length < 8) return "Password must be at least 8 characters";
+                    if (value.length < 8)
+                      return "Password must be at least 8 characters";
                     return null;
                   }}
                 >
@@ -168,20 +185,33 @@ const SignUpPage = () => {
                     Password
                   </Label>
                   <div className="relative">
-                    <Input 
+                    <Input
                       type={isVisible ? "text" : "password"}
                       placeholder="••••••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="w-full h-11 rounded-xl text-sm pl-10 pr-10 text-slate-200 placeholder:text-slate-600 bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.04] focus:outline-none focus:border-purple-500/80 transition-all duration-300"
                     />
-                    <Lock size={15} className="text-slate-500 shrink-0 absolute left-3 top-1/2 -translate-y-1/2 select-none" />
-                    
-                    <button className="focus:outline-none absolute right-3 top-1/2 -translate-y-1/2 select-none" type="button" onClick={toggleVisibility}>
+                    <Lock
+                      size={15}
+                      className="text-slate-500 shrink-0 absolute left-3 top-1/2 -translate-y-1/2 select-none"
+                    />
+
+                    <button
+                      className="focus:outline-none absolute right-3 top-1/2 -translate-y-1/2 select-none"
+                      type="button"
+                      onClick={toggleVisibility}
+                    >
                       {isVisible ? (
-                        <EyeOff size={15} className="text-slate-500 hover:text-slate-300 transition-colors" />
+                        <EyeOff
+                          size={15}
+                          className="text-slate-500 hover:text-slate-300 transition-colors"
+                        />
                       ) : (
-                        <Eye size={15} className="text-slate-500 hover:text-slate-300 transition-colors" />
+                        <Eye
+                          size={15}
+                          className="text-slate-500 hover:text-slate-300 transition-colors"
+                        />
                       )}
                     </button>
                   </div>
@@ -190,21 +220,24 @@ const SignUpPage = () => {
               </motion.div>
 
               {/* ৪. সাবস্ক্রিপশন প্ল্যান (রেডিও অপশন - নতুন যুক্ত করা হয়েছে) */}
-              <motion.div variants={itemVariants} className="flex flex-col gap-1.5">
+              <motion.div
+                variants={itemVariants}
+                className="flex flex-col gap-1.5"
+              >
                 <Label className="text-slate-300 font-bold text-xs tracking-wide select-none">
                   Subscription Plan
                 </Label>
-                <RadioGroup 
-                  defaultValue="seeker" 
-                  name="role" 
+                <RadioGroup
+                  defaultValue="seeker"
+                  name="role"
                   orientation="horizontal"
                   className="flex gap-3"
                   classNames={{
-                    wrapper: "gap-3 flex-row w-full"
+                    wrapper: "gap-3 flex-row w-full",
                   }}
                 >
                   {/* Job Seeker Option */}
-                  <Radio 
+                  <Radio
                     value="seeker"
                     className="flex-1 p-3 rounded-xl border border-white/[0.06] bg-white/[0.01] hover:bg-white/[0.03] data-[selected=true]:border-purple-500 data-[selected=true]:bg-purple-500/5 transition-all cursor-pointer m-0"
                   >
@@ -213,14 +246,18 @@ const SignUpPage = () => {
                         <Radio.Indicator className="bg-purple-600" />
                       </Radio.Control>
                       <Radio.Content>
-                        <Label className="text-xs font-bold text-slate-200 cursor-pointer block leading-tight">Job Seeker</Label>
-                        <Description className="text-[10px] text-slate-500 block mt-0.5 leading-none">Find your next role</Description>
+                        <Label className="text-xs font-bold text-slate-200 cursor-pointer block leading-tight">
+                          Job Seeker
+                        </Label>
+                        <Description className="text-[10px] text-slate-500 block mt-0.5 leading-none">
+                          Find your next role
+                        </Description>
                       </Radio.Content>
                     </div>
                   </Radio>
 
                   {/* Recruiter Option */}
-                  <Radio 
+                  <Radio
                     value="recruiter"
                     className="flex-1 p-3 rounded-xl border border-white/[0.06] bg-white/[0.01] hover:bg-white/[0.03] data-[selected=true]:border-purple-500 data-[selected=true]:bg-purple-500/5 transition-all cursor-pointer m-0"
                   >
@@ -229,8 +266,12 @@ const SignUpPage = () => {
                         <Radio.Indicator className="bg-purple-600" />
                       </Radio.Control>
                       <Radio.Content>
-                        <Label className="text-xs font-bold text-slate-200 cursor-pointer block leading-tight">Recruiter</Label>
-                        <Description className="text-[10px] text-slate-500 block mt-0.5 leading-none">Hire world-class talent</Description>
+                        <Label className="text-xs font-bold text-slate-200 cursor-pointer block leading-tight">
+                          Recruiter
+                        </Label>
+                        <Description className="text-[10px] text-slate-500 block mt-0.5 leading-none">
+                          Hire world-class talent
+                        </Description>
                       </Radio.Content>
                     </div>
                   </Radio>
@@ -249,13 +290,18 @@ const SignUpPage = () => {
               </motion.div>
 
               {/* বটম রিডাইরেক্ট নোট */}
-              <motion.p variants={itemVariants} className="text-center text-xs text-slate-500 font-medium pt-2 select-none">
+              <motion.p
+                variants={itemVariants}
+                className="text-center text-xs text-slate-500 font-medium pt-2 select-none"
+              >
                 Already have an account?{" "}
-                <Link href="#" className="text-xs font-black text-white hover:underline ml-1">
+                <Link
+                  href="/auth/login"
+                  className="text-xs font-black text-white hover:underline ml-1"
+                >
                   Sign In
                 </Link>
               </motion.p>
-
             </Form>
           </div>
         </motion.div>
@@ -263,7 +309,7 @@ const SignUpPage = () => {
         {/* ========================================================
             SECTION 2: RIGHT SIDE - LOTTIE ANIMATION (7 Columns)
             ======================================================== */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -271,8 +317,12 @@ const SignUpPage = () => {
         >
           <div className="w-full max-w-[440px] aspect-square flex items-center justify-center relative mb-6">
             <div className="absolute inset-0 bg-indigo-500/10 rounded-full filter blur-3xl animate-pulse"></div>
-            
-            <Image src={animationData} alt="Animation" className="w-full h-full object-contain relative z-10" />
+
+            <Image
+              src={animationData}
+              alt="Animation"
+              className="w-full h-full object-contain relative z-10"
+            />
           </div>
 
           <div className="text-center max-w-sm">
@@ -280,11 +330,11 @@ const SignUpPage = () => {
               Global Job Match
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed">
-              Connect with vetted world-class companies and discover opportunities personalized just for your talent ecosystem.
+              Connect with vetted world-class companies and discover
+              opportunities personalized just for your talent ecosystem.
             </p>
           </div>
         </motion.div>
-
       </div>
     </div>
   );

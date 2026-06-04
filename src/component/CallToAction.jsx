@@ -29,10 +29,10 @@ const CallToAction = () => {
   };
 
   return (
-    <section className="relative w-full min-h-[60vh] sm:min-h-[70vh] bg-[#0b0612] text-white flex items-center justify-center overflow-hidden py-20 ">
+    <section className="relative w-full min-h-[80vh] sm:min-h-[70vh] bg-[#0b0612] text-white flex items-center justify-center overflow-hidden py-20 ">
       
       {/* Background Image */}
-      <div className="absolute inset-0 z-0 w-full container mx-auto">
+      <div className="absolute inset-0 z-0 max-w-7xl mx-auto">
         <Image
           src={bgImage}
           alt="CTA Background"
@@ -43,17 +43,17 @@ const CallToAction = () => {
       </div>
 
       {/* Vertical Grid */}
-      <div className="absolute inset-0 z-[1] opacity-20 pointer-events-none">
+      <div className="absolute inset-0 z-1 opacity-20 pointer-events-none">
         <div className="w-full h-full bg-[linear-gradient(to_right,#80808015_1px,transparent_1px)] bg-[size:45px_100%] md:bg-[size:65px_100%]" />
       </div>
 
       {/* Glow Effect */}
-      <div className="absolute inset-0 z-[2] pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-indigo-600/30 via-purple-900/10 to-transparent blur-[80px]" />
+      <div className="absolute inset-0 z-2 pointer-events-none">
+        <div className="absolute inset-0 bg-linear-to-b from-indigo-600/30 via-purple-900/10 to-transparent blur-[80px]" />
       </div>
 
       {/* Dark Overlay */}
-      <div className="absolute inset-0 z-[3] bg-black/30" />
+      <div className="absolute inset-0 z-3 bg-black/30" />
 
       {/* Content */}
       <motion.div

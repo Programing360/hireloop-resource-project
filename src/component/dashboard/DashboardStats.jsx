@@ -106,7 +106,7 @@ export default function DashboardStats() {
           </div>
 
           {/* HeroUI v3 টেবিল কন্টেইনার */}
-          <div className="bg-[#141212] border border-white/[0.04] rounded-2xl overflow-hidden shadow-xl">
+          <div className="bg-[#141212] border border-white/[0.04] rounded-2xl overflow-hidden shadow-xl overflow-x-auto">
             <Table  className="w-full">
               <Table.ScrollContainer>
                 <Table.Content
@@ -189,7 +189,7 @@ export default function DashboardStats() {
             </Link>
           </div>
 
-          <div className="bg-[#141212] border border-white/[0.04] rounded-2xl p-4 flex flex-col gap-3 shadow-xl h-full justify-between">
+          <div className="bg-[#141212] border border-white/[0.04] rounded-2xl p-4 flex flex-col gap-3 shadow-xl h-full justify-between overflow-x-auto">
             <div className="flex flex-col gap-2">
               {companies.map((company) => {
                 const CompanyIcon = company.icon;

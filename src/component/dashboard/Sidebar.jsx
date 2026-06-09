@@ -45,7 +45,7 @@ export default function Sidebar() {
     { id: "Jobs", label: "Jobs", icon: Search, href: "/dashboard/jobs" },
     { id: "Post jobs", label: "Post A Job", icon: Bell, href: "/dashboard/jobs/new" },
     { id: "My Company", label: "My Company", icon: Building2, href: "/dashboard/company" },
-    { id: "Manage", label: "Manage", icon: Briefcase, href: "/manage" },
+    { id: "Manage", label: "Manage", icon: Briefcase, href: "/dashboard/manage" },
     { id: "Applications", label: "Applications", icon: FileText, href: "/dashboard/applications" },
     { id: "Settings", label: "Settings", icon: Settings, href: "/dashboard/settings" },
   ];

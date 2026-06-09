@@ -4,7 +4,7 @@ import { Search, MapPin, Briefcase, BarChart2, Users, Star } from "lucide-react"
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
-// 🎯 এখানে আপনার পছন্দমতো ব্যাকগ্রাউন্ড ইমেজের পাথ ম্যানুয়ালি সেট করুন
+
 const MANUAL_BG_IMAGE = "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=1000&auto=format&fit=crop";
 
 const HeroBanner = async () => {

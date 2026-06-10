@@ -15,13 +15,14 @@ import {
 
 // Gravity UI Icons
 import {
-  BriefcaseFill,
   CloudArrowUpIn,
   MapPin,
   Xmark,
 } from "@gravity-ui/icons";
-import { jobsData } from "@/lib/actions/jobs";
+
 import Image from "next/image";
+import { createCompany } from "@/lib/actions/company";
+import { toast } from "react-toastify";
 
 export default function JobPostForm({ onClose }) {
   const [fileInfo, setFileInfo] = useState("");
@@ -36,9 +37,13 @@ export default function JobPostForm({ onClose }) {
       status: "pending",
     };
 
-    const result = await jobsData(allData);
+    const result = await createCompany(allData);
+    if(result.insertedId){
+        toast.success('Congratulations😍')
+        onClose()
+    }
 
-    console.log("Submitted Job Details:", result);
+    console.log("Submitted company Details:", result, allData);
   };
 
   const handleFileChange = async (e) => {
@@ -65,7 +70,6 @@ export default function JobPostForm({ onClose }) {
         // This is the URL you send to your backend
         const imageUrl = result.data.url;
         setFileInfo(imageUrl);
-        console.log("Image uploaded to ImgBB:", imageUrl);
       } else {
         console.error("Upload failed");
       }

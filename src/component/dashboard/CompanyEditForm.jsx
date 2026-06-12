@@ -1,9 +1,11 @@
-'use client';
+"use client";
 
 import React, { useState } from "react";
 import { Button, Input, Label, TextField } from "@heroui/react";
+import { serverUpdate } from "@/lib/core/server";
+import { companyDataUpdate } from "@/lib/actions/company";
 
-export default function CompanyEditForm({ initialData, onClose }) {
+export default function CompanyEditForm({ initialData, onClose, reqruiterId }) {
   // পুরানো কোম্পানির ডেটা স্টেট-এ প্রি-ফিল (Pre-fill) করে দেওয়া হয়েছে
   const [formData, setFormData] = useState({
     name: initialData?.name || "",
@@ -14,34 +16,43 @@ export default function CompanyEditForm({ initialData, onClose }) {
     description: initialData?.description || "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     // এখানে আপনার কোম্পানির আপডেট API কল বা হ্যান্ডলার বসবে
-    console.log("Updated Company Data:", formData);
+
+    const updateData = await companyDataUpdate(reqruiterId, formData);
+    console.log(updateData, formData);
+
     onClose(); // সফলভাবে আপডেট শেষে মোডাল ক্লোজ হবে
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      
       {/* রো ১: কোম্পানির নাম ও ক্যাটাগরি */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <TextField className="w-full flex flex-col gap-1.5" name="name">
-          <Label className="text-xs font-semibold text-gray-400">Company Name</Label>
-          <Input 
+          <Label className="text-xs font-semibold text-gray-400">
+            Company Name
+          </Label>
+          <Input
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="e.g. Acme Corp" 
+            placeholder="e.g. Acme Corp"
             className="bg-[#1c1a1a] border border-[#262626] rounded-xl h-11 px-3 text-sm text-white focus:border-white/20 outline-none w-full"
           />
         </TextField>
 
         <TextField className="w-full flex flex-col gap-1.5" name="category">
-          <Label className="text-xs font-semibold text-gray-400">Industry / Category</Label>
-          <Input 
+          <Label className="text-xs font-semibold text-gray-400">
+            Industry / Category
+          </Label>
+          <Input
             value={formData.category}
-            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-            placeholder="e.g. Technology" 
+            onChange={(e) =>
+              setFormData({ ...formData, category: e.target.value })
+            }
+            placeholder="e.g. Technology"
             className="bg-[#1c1a1a] border border-[#262626] rounded-xl h-11 px-3 text-sm text-white focus:border-white/20 outline-none w-full"
           />
         </TextField>
@@ -50,21 +61,29 @@ export default function CompanyEditForm({ initialData, onClose }) {
       {/* রো ২: ওয়েবসাইট ও লোকেশন */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <TextField className="w-full flex flex-col gap-1.5" name="websiteUrl">
-          <Label className="text-xs font-semibold text-gray-400">Website URL</Label>
-          <Input 
+          <Label className="text-xs font-semibold text-gray-400">
+            Website URL
+          </Label>
+          <Input
             value={formData.websiteUrl}
-            onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
-            placeholder="www.company.com" 
+            onChange={(e) =>
+              setFormData({ ...formData, websiteUrl: e.target.value })
+            }
+            placeholder="www.company.com"
             className="bg-[#1c1a1a] border border-[#262626] rounded-xl h-11 px-3 text-sm text-white focus:border-white/20 outline-none w-full"
           />
         </TextField>
 
         <TextField className="w-full flex flex-col gap-1.5" name="location">
-          <Label className="text-xs font-semibold text-gray-400">Location</Label>
-          <Input 
+          <Label className="text-xs font-semibold text-gray-400">
+            Location
+          </Label>
+          <Input
             value={formData.location}
-            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-            placeholder="City, Country" 
+            onChange={(e) =>
+              setFormData({ ...formData, location: e.target.value })
+            }
+            placeholder="City, Country"
             className="bg-[#1c1a1a] border border-[#262626] rounded-xl h-11 px-3 text-sm text-white focus:border-white/20 outline-none w-full"
           />
         </TextField>
@@ -72,22 +91,40 @@ export default function CompanyEditForm({ initialData, onClose }) {
 
       {/* রো ৩: কর্মী সংখ্যা */}
       <TextField className="w-full flex flex-col gap-1.5" name="employeeCount">
-        <Label className="text-xs font-semibold text-gray-400">Employee Range</Label>
-        <Input 
+        <Label className="text-xs font-semibold text-gray-400">
+          Employee Range
+        </Label>
+
+        <select
           value={formData.employeeCount}
-          onChange={(e) => setFormData({ ...formData, employeeCount: e.target.value })}
-          placeholder="e.g. 1-10 employees" 
+          onChange={(e) =>
+            setFormData({ ...formData, employeeCount: e.target.value })
+          }
           className="bg-[#1c1a1a] border border-[#262626] rounded-xl h-11 px-3 text-sm text-white focus:border-white/20 outline-none w-full"
-        />
+        >
+          <option value="" disabled>
+            Select employee range
+          </option>
+
+          <option value="1-10">1-10 employees</option>
+          <option value="11-50">11-50 employees</option>
+          <option value="51-200">51-200 employees</option>
+          <option value="201-500">201-500 employees</option>
+          <option value="500+">500+ employees</option>
+        </select>
       </TextField>
 
       {/* রো ৪: ডেসক্রিপশন বক্স */}
       <TextField className="w-full flex flex-col gap-1.5" name="description">
-        <Label className="text-xs font-semibold text-gray-400">Brief Description</Label>
-        <textarea 
+        <Label className="text-xs font-semibold text-gray-400">
+          Brief Description
+        </Label>
+        <textarea
           value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          placeholder="Tell us about your company's mission and culture..." 
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })
+          }
+          placeholder="Tell us about your company's mission and culture..."
           rows={4}
           className="bg-[#1c1a1a] border border-[#262626] rounded-xl p-3 text-sm text-white focus:border-white/20 outline-none w-full resize-none"
         />

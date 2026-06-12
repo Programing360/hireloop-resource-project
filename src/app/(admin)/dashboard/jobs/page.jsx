@@ -1,11 +1,17 @@
 import React from "react";
+import ManageAllJobsPage from "./ManageAllJobsPage";
+import { serverFetch } from "@/lib/core/server";
 
-const page = () => {
+const JobsPage = async () => {
+  const jobsData = await serverFetch("api/jobs");
+
+  console.log(jobsData);
+
   return (
     <div>
-      <h1>All Jobs </h1>
+      <ManageAllJobsPage jobsData={jobsData}></ManageAllJobsPage>
     </div>
   );
 };
 
-export default page;
+export default JobsPage;

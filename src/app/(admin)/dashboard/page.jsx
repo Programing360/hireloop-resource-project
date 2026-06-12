@@ -5,7 +5,7 @@ import React from "react";
 
 const DashboardPage = () => {
   return (
-    <div className="w-full border">
+    <div className="w-full">
       <DashboardHeader></DashboardHeader>
       <StatsGrid></StatsGrid>
       <DashboardStats></DashboardStats>

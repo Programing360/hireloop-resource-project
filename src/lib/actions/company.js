@@ -1,13 +1,10 @@
-const baseURL = '' 
-export const createCompany = async(companyData) => {
-    
-    const res = await fetch('http://localhost:5000/api/company',{
-        method:'POST',
-        headers:{
-            'content-type': "application/json",
-        },
-        body:JSON.stringify(companyData)
-    })
-// console.log(res.data);
-    return res.json()
-}
+import { serverMutation, serverUpdate } from "../core/server";
+
+export const createCompany = async (companyData) => {
+    return serverMutation('api/company', companyData)
+};
+
+export const companyDataUpdate = async (companyId,companyData) => {
+    return serverUpdate(`api/companyUpdate/${companyId}`, companyData)
+};
+

@@ -56,7 +56,7 @@ export default function Sidebar() {
   };
 
   const renderNavLinks = () => (
-    <nav className="flex flex-col gap-1.5 w-full">
+    <nav className="flex flex-col gap-1.5 w-full ">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href
@@ -93,8 +93,8 @@ export default function Sidebar() {
   return (
     <>
       {/* ─── MOBILE TOP BAR ─── */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#141212] border-b border-white/[0.03] flex items-center px-4 justify-between z-50">
-        <div className="flex items-center gap-2">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#141212] border-b border-white/[0.03] flex items-center px-4 justify-between z-50 ">
+        <div className="flex items-center gap-2 ">
           <div className="w-7 h-7 bg-gradient-to-tr from-purple-600 to-pink-500 rounded-lg flex items-center justify-center">
             <span className="text-white font-black text-xs">H</span>
           </div>
@@ -115,7 +115,7 @@ export default function Sidebar() {
 
       {/* ─── MOBILE DROPDOWN MENU (Slices down from top bar) ─── */}
       <div
-        className={`md:hidden fixed left-0 right-0 bg-[#141212] border-b border-white/[0.05] z-40 p-6 flex flex-col justify-between transition-all duration-300 ease-in-out shadow-2xl ${
+        className={`md:hidden fixed left-0 right-0 bg-[#141212] border-b border-white/[0.05] z-40 p-6 flex flex-col justify-between transition-all duration-300 ease-in-out shadow-2xl  ${
           isMobileMenuOpen
             ? "top-16 opacity-100 visible pointer-events-auto"
             : "top-[-100%] opacity-0 invisible pointer-events-none"
@@ -167,7 +167,7 @@ export default function Sidebar() {
       </div>
 
       {/* ─── DESKTOP SIDEBAR ─── */}
-      <aside className="hidden md:flex fixed top-0 bottom-0 left-0 w-[260px] bg-[#141212] border-r border-white/[0.03] p-6 flex-col justify-between z-40 select-none">
+      <aside className="hidden md:flex fixed top-0 bottom-0 left-0 w-[260px] bg-[#141212] border-r border-white/[0.03] p-6 flex-col justify-between z-40 select-none overflow-y-auto">
         <div className="flex flex-col w-full">
           <Link href="/">
             <div className="flex items-center gap-2.5 mb-8 pl-1">

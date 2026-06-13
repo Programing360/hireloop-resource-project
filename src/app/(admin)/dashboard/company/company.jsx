@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button, Modal } from "@heroui/react";
 import CompanyCreateForm from "@/component/dashboard/CompanyCreateForm";
 import CompanyEditForm from "@/component/dashboard/CompanyEditForm";
+import { Edit2 } from "lucide-react";
 
 export default function CompanyDashboard({ companyData = [], reqruiterId }) {
   const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
@@ -49,7 +50,7 @@ export default function CompanyDashboard({ companyData = [], reqruiterId }) {
 
   // ─── CASE 2: COMPANY EXISTS ───
   return (
-    <div className="max-w-4xl mx-auto p-8">
+    <div className="max-w-2xl mx-auto p-8 mt-10">
       {companyData?.map((company) => (
         <div
           key={company._id}
@@ -88,14 +89,16 @@ export default function CompanyDashboard({ companyData = [], reqruiterId }) {
             </div>
 
             {/* EDIT BUTTON */}
+
             <Button
               onPress={() => {
                 setSelectedCompany(company);
                 setIsEditModalOpen(true);
               }}
-              className="bg-[#1a1a1a] border border-[#262626] text-white hover:bg-[#262626] rounded-xl"
+              className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-zinc-200 bg-zinc-900 border border-zinc-800 rounded-xl shadow-sm transition-all duration-200 hover:bg-zinc-800 hover:text-white hover:border-zinc-700 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-zinc-500"
             >
-              Edit Profile
+              <Edit2 className="w-4 h-4 text-zinc-400 group-hover:text-zinc-200" />
+              <span>Edit Profile</span>
             </Button>
           </div>
 
@@ -149,9 +152,9 @@ export default function CompanyDashboard({ companyData = [], reqruiterId }) {
       {/* ─── EDIT MODAL ─── */}
       <Modal isOpen={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
         <Modal.Backdrop className="bg-black/60 backdrop-blur-sm fixed inset-0 z-50 flex items-center justify-center p-4">
-          <Modal.Container placement="center">
-            <Modal.Dialog className="bg-[#121212] border border-[#262626] text-white rounded-2xl p-0 w-full max-w-2xl">
-              <Modal.CloseTrigger />
+          <Modal.Container className='w-full md:max-w-2xl' placement="center">
+            <Modal.Dialog className="bg-[#121212] border border-[#262626] text-white rounded-2xl p-0 w-full max-w-2xl p-3">
+              <Modal.CloseTrigger className="cursor-pointer hover:bg-red-600/70 rounded-full p-2"/>
 
               <Modal.Header className="px-6 pt-6 pb-4 border-b border-[#262626]">
                 <Modal.Heading className="text-xl font-bold">
@@ -162,7 +165,7 @@ export default function CompanyDashboard({ companyData = [], reqruiterId }) {
                 </p>
               </Modal.Header>
 
-              <Modal.Body className="p-6">
+              <Modal.Body className="p-6 w-full">
                 {selectedCompany && (
                   <CompanyEditForm
                     initialData={selectedCompany}

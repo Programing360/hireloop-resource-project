@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Button, Input, Label, TextField } from "@heroui/react";
 import { serverUpdate } from "@/lib/core/server";
 import { companyDataUpdate } from "@/lib/actions/company";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function CompanyEditForm({ initialData, onClose, reqruiterId }) {
   // পুরানো কোম্পানির ডেটা স্টেট-এ প্রি-ফিল (Pre-fill) করে দেওয়া হয়েছে
@@ -15,20 +17,24 @@ export default function CompanyEditForm({ initialData, onClose, reqruiterId }) {
     websiteUrl: initialData?.websiteUrl || "",
     description: initialData?.description || "",
   });
-
+  const route = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // এখানে আপনার কোম্পানির আপডেট API কল বা হ্যান্ডলার বসবে
 
     const updateData = await companyDataUpdate(reqruiterId, formData);
-    console.log(updateData, formData);
+
+    if (updateData.modifiedCount > 0) {
+      toast.success("Update Successfull");
+      route.push("/dashboard/company");
+    }
 
     onClose(); // সফলভাবে আপডেট শেষে মোডাল ক্লোজ হবে
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
       {/* রো ১: কোম্পানির নাম ও ক্যাটাগরি */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <TextField className="w-full flex flex-col gap-1.5" name="name">
@@ -47,14 +53,40 @@ export default function CompanyEditForm({ initialData, onClose, reqruiterId }) {
           <Label className="text-xs font-semibold text-gray-400">
             Industry / Category
           </Label>
-          <Input
+
+          <select
             value={formData.category}
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
-            placeholder="e.g. Technology"
             className="bg-[#1c1a1a] border border-[#262626] rounded-xl h-11 px-3 text-sm text-white focus:border-white/20 outline-none w-full"
-          />
+          >
+            <option value="" disabled>
+              Select Industry
+            </option>
+
+            <option value="Technology">Technology</option>
+            <option value="Software Development">Software Development</option>
+            <option value="Fintech">Fintech</option>
+            <option value="E-commerce">E-commerce</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Education">Education</option>
+            <option value="Telecommunications">Telecommunications</option>
+            <option value="Marketing & Advertising">
+              Marketing & Advertising
+            </option>
+            <option value="Manufacturing">Manufacturing</option>
+            <option value="Real Estate">Real Estate</option>
+            <option value="Logistics & Supply Chain">
+              Logistics & Supply Chain
+            </option>
+            <option value="Banking & Finance">Banking & Finance</option>
+            <option value="Retail">Retail</option>
+            <option value="Travel & Tourism">Travel & Tourism</option>
+            <option value="Media & Entertainment">Media & Entertainment</option>
+            <option value="Non-Profit">Non-Profit</option>
+            <option value="Other">Other</option>
+          </select>
         </TextField>
       </div>
 

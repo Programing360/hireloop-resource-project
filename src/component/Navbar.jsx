@@ -144,7 +144,7 @@ export default function CustomNavbar() {
       >
         <NavbarItem>
           <Link
-            href="#"
+            href="/jobs"
             className="text-gray-300 hover:text-white text-[13px] font-medium tracking-wide transition-all duration-200 px-4 py-1.5 rounded-full hover:bg-white/[0.04]"
           >
             Browse Jobs
@@ -282,7 +282,7 @@ export default function CustomNavbar() {
       </NavbarContent>
 
       {/* ─── 5. MOBILE MENU DRAWER ─── */}
-      <NavbarMenu className="bg-[#141212]/95 backdrop-blur-xl pt-6 px-6 gap-3 border-t border-white/[0.03] fixed inset-0 z-40">
+      <NavbarMenu className="bg-[#141212]/95 backdrop-blur-xl pt-6 px-6 gap-3 border-t border-white/[0.03] fixed inset-0 z-40 pt-16">
         {/* Mobile Theme Toggle */}
         <div className="flex items-center justify-between py-2  border-b border-white/[0.04] mb-2">
           <span className="text-sm font-medium text-gray-400">

@@ -7,6 +7,6 @@ export const jobsData = async (data) => {
     },
     body: JSON.stringify(data),
   });
-
+  
   return res.json();
 };

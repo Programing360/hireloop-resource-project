@@ -9,8 +9,6 @@ const JobPage = async() => {
     const companyData = await CompanyAllData()
 
     const companyId = await getUseSession()
-    console.log(companyId);
-
     return (
         <div>
             <JobPostForm reqruiterId={companyId?.id}companyData={companyData}></JobPostForm>

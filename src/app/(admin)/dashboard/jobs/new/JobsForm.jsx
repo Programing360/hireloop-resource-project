@@ -14,15 +14,13 @@ import {
 } from "@heroui/react";
 
 // Gravity UI Icons
-import {
-  MapPin,
-  Xmark,
-} from "@gravity-ui/icons";
+import { MapPin, Xmark } from "@gravity-ui/icons";
 import { jobsData } from "@/lib/actions/jobs";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
-export default function JobPostForm({ onClose,reqruiterId, companyData }) {
-  const [fileInfo, setFileInfo] = useState("");
-  console.log(companyData);
+export default function JobPostForm({ onClose, reqruiterId }) {
+  const route = useRouter()
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -30,12 +28,14 @@ export default function JobPostForm({ onClose,reqruiterId, companyData }) {
     const allData = {
       ...data,
       reqruiterId,
-      image: fileInfo,
       status: "pending",
     };
 
     const result = await jobsData(allData);
-
+      if(result.insertedId){
+        toast.success('Job Post Successful')
+        route.push('/dashboard/jobs')
+      }
     console.log("Submitted Job Details:", result);
   };
 
@@ -63,7 +63,7 @@ export default function JobPostForm({ onClose,reqruiterId, companyData }) {
   //       // This is the URL you send to your backend
   //       const imageUrl = result.data.url;
   //       setFileInfo(imageUrl);
-      
+
   //     } else {
   //       console.error("Upload failed");
   //     }
@@ -106,7 +106,7 @@ export default function JobPostForm({ onClose,reqruiterId, companyData }) {
         >
           {/* Row 1: Job Title & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
-            <TextField className="w-full" name="JobTitle" isRequired>
+            <TextField className="w-full" name="jobTitle" isRequired>
               <Label className="text-sm font-medium text-[#d4d4d4] block mb-1.5">
                 Job Title
               </Label>
@@ -326,7 +326,6 @@ export default function JobPostForm({ onClose,reqruiterId, companyData }) {
                 />
               </TextField>
             </div>
-            
           </div>
 
           {/* Row 4: Job Description Custom Area */}

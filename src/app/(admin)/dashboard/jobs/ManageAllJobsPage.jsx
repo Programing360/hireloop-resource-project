@@ -89,9 +89,11 @@ const ManageAllJobsPage = ({ jobsData = [] }) => {
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     {job.image ? (
-                      <img
+                      <Image
                         src={job.image}
                         alt={job.jobTitle}
+                        width={'40'}
+                        height={'40'}
                         className="w-12 h-12 rounded-xl object-cover ring-1 ring-zinc-700/50 shrink-0"
                       />
                     ) : (

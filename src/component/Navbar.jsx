@@ -160,7 +160,7 @@ export default function CustomNavbar() {
         </NavbarItem>
         <NavbarItem>
           <Link
-            href="#"
+            href="/pricing"
             className="text-gray-300 hover:text-white text-[13px] font-medium tracking-wide transition-all duration-200 px-4 py-1.5 rounded-full hover:bg-white/[0.04]"
           >
             Pricing

@@ -38,8 +38,9 @@ const cardVariants = {
   },
 };
 
-export default function JobSection({ jobsArray }) {
+export default function JobCard({ jobsArray, user }) {
   const jobs = jobsArray || [];
+  console.log(jobs);
 
   // যদি কোনো জব না থাকে তার জন্য একটি সেফগার্ড ট্র্যাকিং
   if (!jobs || jobs.length === 0) {
@@ -78,7 +79,7 @@ export default function JobSection({ jobsArray }) {
       animate="visible"
       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mx-auto p-4"
     >
-      {jobs.map((job) => (
+      {jobs?.map((job) => (
         // কার্ডটিকে motion.div দিয়ে র‍্যাপ করা হয়েছে স্মুথ হোভার ও স্ক্রল অ্যানিমেশনের জন্য
         <motion.div
           key={job._id}
@@ -179,12 +180,21 @@ export default function JobSection({ jobsArray }) {
                 </span>
               </div>
 
-              <Link href={`jobs/${job._id}`}>
-                <Button className="bg-white text-black hover:bg-gray-200 font-semibold text-xs h-9 px-4 rounded-xl flex items-center gap-1 transition-colors">
-                  Apply Now
-                  <ArrowUpRight size={14} strokeWidth={2.5} />
-                </Button>
-              </Link>
+              {user ? (
+                <Link href={`/jobs/${job._id}`}>
+                  <Button className="bg-white text-black hover:bg-gray-200 font-semibold text-xs h-9 px-4 rounded-xl flex items-center gap-1 transition-colors">
+                    Apply Now
+                    <ArrowUpRight size={14} strokeWidth={2.5} />
+                  </Button>
+                </Link>
+              ) : (
+                <Link href={`/auth/login`}>
+                  <Button className="bg-white text-black hover:bg-gray-200 font-semibold text-xs h-9 px-4 rounded-xl flex items-center gap-1 transition-colors">
+                    Apply Now
+                    <ArrowUpRight size={14} strokeWidth={2.5} />
+                  </Button>
+                </Link>
+              )}
             </Card.Footer>
           </Card>
         </motion.div>

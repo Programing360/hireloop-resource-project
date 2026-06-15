@@ -5,6 +5,8 @@ export const serverFetch = async (apiUrl) => {
   return result.json();
 };
 
+
+
  
 export const serverMutation = async (apiUrl, data) => {
   const res = await fetch(`${baseURL}/${apiUrl}`, {

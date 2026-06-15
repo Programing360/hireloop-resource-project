@@ -1,11 +1,14 @@
 import { serverFetch } from '@/lib/core/server';
 import React from 'react';
-import JobCard from './JobsCard'; // আপনার ফাইলের নাম অনুযায়ী (লুপ সহ)
+
+import { getUseSession } from '@/lib/core/session';
+import JobCard from './JobsCard';
 
 const JobsPage = async () => {
   const allJobs = await serverFetch('allJobs');
-  console.log(allJobs);
-
+  
+   const user = await getUseSession()
+   
   return (
     // মেইন কন্টেইনারে ডার্ক থিম এবং স্মুথ অ্যানিমেটেড গ্রাডিয়েন্ট সেট করা হয়েছে
     <div className="relative min-h-screen bg-[#060606] bg-gradient-to-tr from-[#060606] via-[#0d0b14] to-[#060606] bg-[length:400%400%] animate-gradient-slow overflow-hidden pt-16">
@@ -32,7 +35,7 @@ const JobsPage = async () => {
 
         {/* জব কার্ড গ্রিড কম্পোনেন্ট */}
         <div className="mt-6">
-          <JobCard jobsArray={allJobs} />
+          <JobCard jobsArray={allJobs} user={user}/>
         </div>
         
       </div>

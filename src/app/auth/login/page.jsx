@@ -19,12 +19,22 @@ import animationData from '../../../../public/images/animate.svg';
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
+import { useRouter, useSearchParams } from "next/navigation";
 const LoginPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // const searchParams = useSearchParams();
+  // const router = useRouter()
+  // const callbackUrl =
+  //     searchParams.get("callbackUrl") || "/";
+
+  //   router.push(callbackUrl);
+  // console.log(searchParams);
+
+
 
   // ১. প্যারেন্ট কন্টেইনারের জন্য অ্যানিমেশন ভেরিয়েন্ট
   const containerVariants = {
@@ -69,7 +79,6 @@ const LoginPage = () => {
      }else{
       toast.error(`${error.message}` || "Login Failed! Please check your credentials.")
      }
-     console.log(data, error);
 
     // Replace with your real sign-in logic
   };
@@ -257,7 +266,7 @@ const LoginPage = () => {
                 variants={itemVariants}
                 className="text-center text-xs text-slate-500 font-medium pt-4 select-none"
               >
-                Don't have an account?{" "}
+                Do not have an account?{" "}
                 <Link
                   href="/auth/signUp"
                   className="text-xs font-black text-white hover:underline ml-1"

@@ -15,11 +15,11 @@ import {
   RadioGroup,
 } from "@heroui/react";
 import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import animationData from "../../../../public/images/animate.svg";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 const SignUpPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -27,6 +27,8 @@ const SignUpPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const router = useRouter()
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -50,8 +52,6 @@ const SignUpPage = () => {
     const formData = new FormData(e.currentTarget);
     const user = Object.fromEntries(formData.entries());
 
-    
-
     const { data, error } = await authClient.signUp.email({
       name: user.fullName,
       email: user.email,
@@ -59,12 +59,14 @@ const SignUpPage = () => {
       role: user.role,
       callbackURL: "/auth/login",
     });
-    if(data){
-          toast.success("Sign Up Successful!")
-         }else{
-          toast.error(`${error.message}` || "Sign Up Failed! Please check your credentials.")
-         }
-    console.log(data, error, user);
+    if (data?.user) {
+      toast.success("Sign Up Successful!");
+      router.push('/auth/login')
+    } else {
+      toast.error(
+        `${error.message}` || "Sign Up Failed! Please check your credentials.",
+      );
+    }
   };
 
   return (

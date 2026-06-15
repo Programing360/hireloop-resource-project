@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   Fieldset,
@@ -15,12 +15,26 @@ import {
 } from "@heroui/react";
 import { motion } from "framer-motion";
 import { UploadCloud } from "lucide-react";
+import { jobApply } from "@/lib/actions/jobs";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation"; // Next.js Client router import
 
-export default function JobApplyForm({ companyName = "TechNova" }) {
+export default function JobApplyForm({ applicant, companyName, jobs, applicantData }) {
+  const router = useRouter();
+  
+  // Safe extraction of previous application count from applicantData
+  const appliedCount = applicantData?.appliedJobsCount || 0;
 
-    
+  // ─── AUTH / ACCESS LIMIT CHECK ───
+  // If the user has reached 3 or more applications, prevent them from seeing the page and redirect to pricing.
+  useEffect(() => {
+    if (appliedCount >= 3) {
+      toast.info("You have reached your free plan limit. Please upgrade to apply for more jobs.");
+      router.push(`/pricing?currentApplies=${applicantData.length}`);
+    }
+  }, [applicantData, router]);
 
-  // React Hook Form ইনিশিয়ালাইজেশন
+  // React Hook Form Initialization
   const {
     register,
     handleSubmit,
@@ -33,9 +47,38 @@ export default function JobApplyForm({ companyName = "TechNova" }) {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("Form Submitted Successfully:", data);
+  const onSubmit = async (data) => {
+    // Double safeguard check on actual form submit event
+    if (appliedCount >= 3) {
+      toast.error("Application blocked. You have used all 3 free applications.");
+      router.push(`/pricing?currentApplies=${appliedCount}`);
+      return;
+    }
+
+    const formData = {
+      jobId: jobs._id,
+      jobTitle: jobs.title,
+      companyName: companyName,
+      applicantId: applicant.id,
+      applicantName: applicant?.name,
+      applicantEmail: applicant.email,
+      ...data,
+    };
+
+    const result = await jobApply(formData);
+    if (result.insertedId) {
+      toast.success("Apply Successful");
+    }
   };
+
+  // If the layout is redirecting, render a clean fallback loader rather than structural elements flashing
+  if (appliedCount >= 3) {
+    return (
+      <div className="min-h-screen bg-[#060606] text-white flex items-center justify-center">
+        <p className="text-sm text-gray-400 animate-pulse">Redirecting to pricing plans...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#060606] text-white p-4 md:p-8 flex items-center justify-center ">
@@ -46,15 +89,21 @@ export default function JobApplyForm({ companyName = "TechNova" }) {
         className="w-full max-w-3xl bg-[#121212] border border-[#262626] rounded-2xl p-6 md:p-10 shadow-2xl mt-20"
       >
         <div className="mb-8 border-b border-white/[0.04] pb-6">
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
-            Apply for{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              {companyName}
+          <div className="flex flex-col sm:flex-row-reverse md:flex-row-reverse sm:items-center justify-between gap-2">
+            <span className="text-xs bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-gray-400 self-start sm:self-auto">
+              Free Applies Used: <span className="text-purple-400 font-bold">{appliedCount}/3</span>
             </span>
-          </h1>
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
+              Apply for{" "} 
+              <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                {/* {companyName} */}
+                current Job
+              </span>
+            </h1>
+            {/* Added a modern badge showing their current status counter */}
+          </div>
           <p className="text-xs text-gray-500 mt-1.5 font-normal">
-            Please provide your verified professional matrix. Recruiters review
-            these details directly.
+            Please provide your verified professional matrix. Recruiters review these details directly.
           </p>
         </div>
 
@@ -74,7 +123,7 @@ export default function JobApplyForm({ companyName = "TechNova" }) {
                   label="Full Name"
                   placeholder="John Doe"
                   variant="bordered"
-                  className="w-full"
+                  className="w-full border border-gray-700 rounded-2xl p-2"
                 />
                 {errors.fullName && (
                   <p className="text-[11px] text-rose-500 font-medium pl-1">
@@ -96,6 +145,7 @@ export default function JobApplyForm({ companyName = "TechNova" }) {
                   placeholder="john@example.com"
                   type="email"
                   variant="bordered"
+                  className="border border-gray-700 rounded-2xl p-2"
                 />
                 {errors.email && (
                   <p className="text-[11px] text-rose-500 font-medium pl-1">
@@ -112,6 +162,7 @@ export default function JobApplyForm({ companyName = "TechNova" }) {
                   label="Phone Number"
                   placeholder="+880 1712-XXXXXX"
                   variant="bordered"
+                  className="border border-gray-700 rounded-2xl p-2"
                 />
                 {errors.phone && (
                   <p className="text-[11px] text-rose-500 font-medium pl-1">
@@ -127,12 +178,13 @@ export default function JobApplyForm({ companyName = "TechNova" }) {
                 label="Current Location"
                 placeholder="Dhaka, Bangladesh"
                 variant="bordered"
+                className="border border-gray-700 rounded-2xl p-2"
               />
             </Fieldset.Group>
           </Fieldset>
 
           {/* ─── SECTION 2: PROFESSIONAL INFORMATION ─── */}
-          <Fieldset className="border-none p-0 m-0 space-y-4">
+          <Fieldset className="border-none p-0 m-0 space-y-4 mt-4">
             <Fieldset.Legend className="text-sm font-bold tracking-wider text-purple-400 uppercase mb-2">
               Professional Information
             </Fieldset.Legend>
@@ -143,9 +195,9 @@ export default function JobApplyForm({ companyName = "TechNova" }) {
                 label="Current Job Title (Optional)"
                 placeholder="Software Engineer"
                 variant="bordered"
+                className="border border-gray-700 rounded-2xl px-2"
               />
 
-              {/* HEROUI SPECIFIC SELECT (NO STARTCONTENT) */}
               <Controller
                 name="experience"
                 control={control}
@@ -291,7 +343,11 @@ export default function JobApplyForm({ companyName = "TechNova" }) {
                   <span className="text-xs font-medium text-gray-400">
                     Upload Document / Pitch
                   </span>
-                  <input type="file" className="hidden" accept=".pdf,.docx" />
+                  <input
+                    type="file"
+                    className="hidden border border-gray-700 rounded-2xl p-2"
+                    accept=".pdf,.docx"
+                  />
                 </label>
               </div>
             </Fieldset.Group>
@@ -304,7 +360,6 @@ export default function JobApplyForm({ companyName = "TechNova" }) {
             </Fieldset.Legend>
 
             <Fieldset.Group className="space-y-5">
-              {/* EXACT HEROUI TEXTAREA COMPONENT DEFINITION */}
               <div className="flex flex-col gap-1.5">
                 <span className="text-xs text-gray-400 font-medium mb-1 block">
                   Why are you interested in this position?
@@ -353,8 +408,7 @@ export default function JobApplyForm({ companyName = "TechNova" }) {
                       onValueChange={field.onChange}
                       className="text-xs font-medium text-gray-300"
                     >
-                      I am legally authorized to work in this specified
-                      region/location.
+                      I am legally authorized to work in this specified region/location.
                     </Checkbox>
                   )}
                 />
@@ -367,15 +421,13 @@ export default function JobApplyForm({ companyName = "TechNova" }) {
                       onValueChange={field.onChange}
                       className="text-xs font-medium text-gray-300"
                     >
-                      I am willing to relocate if the company requires it.
-                      (Optional)
+                      I am willing to relocate if the company requires it. (Optional)
                     </Checkbox>
                   )}
                 />
               </div>
             </Fieldset.Group>
 
-            {/* HEROUI FIELDSET ACTIONS */}
             <Fieldset.Actions className="pt-6 border-t border-[#262626] mt-6">
               <Button
                 type="submit"

@@ -28,7 +28,7 @@ export const serverUpdate = async (apiUrl, data) => {
     },
     body: JSON.stringify(data),
   });
-  console.log(res);
+
 
   return res.json();
 };

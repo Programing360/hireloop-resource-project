@@ -6,10 +6,17 @@ import { getUseSession } from "@/lib/core/session";
 import { Button } from "@heroui/react";
 import Link from "next/link";
 import { ShieldAlert, ArrowLeft } from "lucide-react";
+import { getJobsById } from "@/lib/api/jobs";
+import { getApplicantData } from "@/lib/applicant/applicant";
 
-const ApplicationPage = async () => {
+const ApplicationPage = async ({ params }) => {
   // সার্ভার সাইড সেশন গেট করা
+
+  const { id } = await params;
   const user = await getUseSession();
+  const jobs = await getJobsById(id);
+  const applicantData = await getApplicantData(user.id)
+  // console.log(data);
 
   // ১. ইউজার যদি লগইন না থাকে বা রিক্রুটার হয়, তবে তাকে রেস্ট্রিক্ট করা (যেহেতু রিক্রুটাররা অ্যাপ্লাই করে না)
   if (!user || user.role === "recruiter") {
@@ -36,10 +43,7 @@ const ApplicationPage = async () => {
           {/* অ্যাকশন বাটন */}
           <div className="pt-2">
             <Link href="/">
-              <Button
-                
-                className="w-full bg-white text-black font-bold h-11 rounded-xl text-xs flex items-center justify-center gap-2 transition-all hover:bg-gray-200 cursor-pointer"
-              >
+              <Button className="w-full bg-white text-black font-bold h-11 rounded-xl text-xs flex items-center justify-center gap-2 transition-all hover:bg-gray-200 cursor-pointer">
                 <ArrowLeft size={14} />
                 Back to Dashboard
               </Button>
@@ -54,7 +58,7 @@ const ApplicationPage = async () => {
   return (
     <div className="bg-[#060606] min-h-screen">
       {/* আপনি চাইলে এখানে প্রপ্স হিসেবে ইউজারের ডাটা ফর্মে পাস করতে পারেন অটো-ফিলের জন্য */}
-      <JobApplyForm userDetails={user} />
+      <JobApplyForm applicant={user} companyName={id} jobs={jobs} applicantData={applicantData} />
     </div>
   );
 };

@@ -40,7 +40,7 @@ const cardVariants = {
 
 export default function JobCard({ jobsArray, user }) {
   const jobs = jobsArray || [];
-  console.log(jobs);
+  // console.log(user);
 
   // যদি কোনো জব না থাকে তার জন্য একটি সেফগার্ড ট্র্যাকিং
   if (!jobs || jobs.length === 0) {

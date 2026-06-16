@@ -19,17 +19,24 @@ import { jobApply } from "@/lib/actions/jobs";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation"; // Next.js Client router import
 
-export default function JobApplyForm({ applicant, companyName, jobs, applicantData }) {
+export default function JobApplyForm({
+  applicant,
+  companyName,
+  jobs,
+  applicantData,
+}) {
   const router = useRouter();
-  
+
   // Safe extraction of previous application count from applicantData
-  const appliedCount = applicantData?.appliedJobsCount || 0;
+  // const applicantData.length = applicantData?.appliedJobsCount || 0;
 
   // ─── AUTH / ACCESS LIMIT CHECK ───
   // If the user has reached 3 or more applications, prevent them from seeing the page and redirect to pricing.
   useEffect(() => {
-    if (appliedCount >= 3) {
-      toast.info("You have reached your free plan limit. Please upgrade to apply for more jobs.");
+    if (applicantData.length >= 3) {
+      toast.info(
+        "You have reached your free plan limit. Please upgrade to apply for more jobs.",
+      );
       router.push(`/pricing?currentApplies=${applicantData.length}`);
     }
   }, [applicantData, router]);
@@ -49,9 +56,11 @@ export default function JobApplyForm({ applicant, companyName, jobs, applicantDa
 
   const onSubmit = async (data) => {
     // Double safeguard check on actual form submit event
-    if (appliedCount >= 3) {
-      toast.error("Application blocked. You have used all 3 free applications.");
-      router.push(`/pricing?currentApplies=${appliedCount}`);
+    if (applicantData.length >= 3) {
+      toast.error(
+        "Application blocked. You have used all 3 free applications.",
+      );
+      router.push(`/pricing?currentApplies=${applicantData.length}`);
       return;
     }
 
@@ -68,14 +77,17 @@ export default function JobApplyForm({ applicant, companyName, jobs, applicantDa
     const result = await jobApply(formData);
     if (result.insertedId) {
       toast.success("Apply Successful");
+      
     }
   };
 
   // If the layout is redirecting, render a clean fallback loader rather than structural elements flashing
-  if (appliedCount >= 3) {
+  if (applicantData.length >= 3) {
     return (
       <div className="min-h-screen bg-[#060606] text-white flex items-center justify-center">
-        <p className="text-sm text-gray-400 animate-pulse">Redirecting to pricing plans...</p>
+        <p className="text-sm text-gray-400 animate-pulse">
+          Redirecting to pricing plans...
+        </p>
       </div>
     );
   }
@@ -91,10 +103,13 @@ export default function JobApplyForm({ applicant, companyName, jobs, applicantDa
         <div className="mb-8 border-b border-white/[0.04] pb-6">
           <div className="flex flex-col sm:flex-row-reverse md:flex-row-reverse sm:items-center justify-between gap-2">
             <span className="text-xs bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-gray-400 self-start sm:self-auto">
-              Free Applies Used: <span className="text-purple-400 font-bold">{appliedCount}/3</span>
+              Free Applies Used:{" "}
+              <span className="text-purple-400 font-bold">
+                {applicantData.length}/3
+              </span>
             </span>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
-              Apply for{" "} 
+              Apply for{" "}
               <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
                 {/* {companyName} */}
                 current Job
@@ -103,7 +118,8 @@ export default function JobApplyForm({ applicant, companyName, jobs, applicantDa
             {/* Added a modern badge showing their current status counter */}
           </div>
           <p className="text-xs text-gray-500 mt-1.5 font-normal">
-            Please provide your verified professional matrix. Recruiters review these details directly.
+            Please provide your verified professional matrix. Recruiters review
+            these details directly.
           </p>
         </div>
 
@@ -408,7 +424,8 @@ export default function JobApplyForm({ applicant, companyName, jobs, applicantDa
                       onValueChange={field.onChange}
                       className="text-xs font-medium text-gray-300"
                     >
-                      I am legally authorized to work in this specified region/location.
+                      I am legally authorized to work in this specified
+                      region/location.
                     </Checkbox>
                   )}
                 />
@@ -421,7 +438,8 @@ export default function JobApplyForm({ applicant, companyName, jobs, applicantDa
                       onValueChange={field.onChange}
                       className="text-xs font-medium text-gray-300"
                     >
-                      I am willing to relocate if the company requires it. (Optional)
+                      I am willing to relocate if the company requires it.
+                      (Optional)
                     </Checkbox>
                   )}
                 />

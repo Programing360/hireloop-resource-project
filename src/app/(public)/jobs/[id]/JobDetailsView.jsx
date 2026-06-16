@@ -41,7 +41,6 @@ const staggerContainer = {
 export default function JobDetailsView({ jobData }) {
   const router = useRouter();
 
-    console.log(jobData);
   // সেফগার্ড ডেমো ডেটা (যদি প্রপ্স খালি থাকে)
   const job = jobData || {
     _id: "6a2ccf649c3b5af27e58c724",

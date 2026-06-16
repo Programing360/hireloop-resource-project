@@ -16,7 +16,7 @@ const ApplicationPage = async ({ params }) => {
   const user = await getUseSession();
   const jobs = await getJobsById(id);
   const applicantData = await getApplicantData(user.id)
-  // console.log(data);
+  // console.log(user);
 
   // ১. ইউজার যদি লগইন না থাকে বা রিক্রুটার হয়, তবে তাকে রেস্ট্রিক্ট করা (যেহেতু রিক্রুটাররা অ্যাপ্লাই করে না)
   if (!user || user.role === "recruiter") {
@@ -58,7 +58,7 @@ const ApplicationPage = async ({ params }) => {
   return (
     <div className="bg-[#060606] min-h-screen">
       {/* আপনি চাইলে এখানে প্রপ্স হিসেবে ইউজারের ডাটা ফর্মে পাস করতে পারেন অটো-ফিলের জন্য */}
-      <JobApplyForm applicant={user} companyName={id} jobs={jobs} applicantData={applicantData} />
+      <JobApplyForm companyName={id} jobs={jobs} applicantData={applicantData} />
     </div>
   );
 };
